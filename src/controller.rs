@@ -126,6 +126,7 @@ impl AppState {
     /// * `extra_rpcs` - list of additional RPC endpoints for tx submission
     pub async fn new(
         endpoint: &str,
+        ws_url: Option<&str>,
         devnet: bool,
         wallet: Wallet,
         commitment: Option<(CommitmentConfig, CommitmentConfig)>,
@@ -143,9 +144,15 @@ impl AppState {
         };
 
         let rpc_client = RpcClient::new_with_commitment(endpoint.into(), state_commitment);
-        let client = DriftClient::new(context, rpc_client, wallet.clone())
-            .await
-            .expect("ok");
+        let client = if let Some(ws) = ws_url {
+            DriftClient::new_with_ws_url(context, rpc_client, wallet.clone(), ws)
+                .await
+                .expect("ok")
+        } else {
+            DriftClient::new(context, rpc_client, wallet.clone())
+                .await
+                .expect("ok")
+        };
 
         for sub_account_id in &sub_account_ids {
             let sub_account = wallet.sub_account(*sub_account_id);

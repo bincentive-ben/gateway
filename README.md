@@ -106,6 +106,9 @@ drift-gateway --dev https://api.devnet.solana.com
 # or mainnet
 # NB: `api.mainnet-beta.solana.com` is not recommend for production use cases
 drift-gateway https://rpc-provider.example.com --markets sol-perp,sol,weth
+
+# with separate HTTP and WebSocket RPC endpoints (useful when providers give different URLs)
+drift-gateway https://rpc-provider.example.com wss://rpc-provider.example.com/ws --markets sol-perp,sol,weth
 ```
 
 ## gRPC mode
@@ -137,12 +140,13 @@ These runtime environment variables are required:
 
 ```bash
 ./target/release/drift-gateway --help
-Usage: drift-gateway <rpc_host> [--markets <markets>] [--dev] [--host <host>] [--port <port>] [--ws-port <ws-port>] [--keep-alive-timeout <keep-alive-timeout>] [--delegate <delegate>] [--emulate <emulate>] [--tx-commitment <tx-commitment>] [--commitment <commitment>] [--default-sub-account-id <default-sub-account-id>] [--skip-tx-preflight] [--extra-rpcs <extra-rpcs>] [--verbose] [--grpc]
+Usage: drift-gateway <rpc_host> [<rpc_wss>] [--markets <markets>] [--dev] [--host <host>] [--port <port>] [--ws-port <ws-port>] [--keep-alive-timeout <keep-alive-timeout>] [--delegate <delegate>] [--emulate <emulate>] [--tx-commitment <tx-commitment>] [--commitment <commitment>] [--default-sub-account-id <default-sub-account-id>] [--skip-tx-preflight] [--extra-rpcs <extra-rpcs>] [--verbose] [--grpc]
 
 Drift gateway server
 
 Positional Arguments:
-  rpc_host          the solana RPC URL
+  rpc_host          the solana RPC HTTP/S URL
+  rpc_wss           the solana RPC WebSocket URL (wss://). If not provided, it is derived from rpc_host
 
 Options:
   --markets         list of markets to trade e.g '--markets sol-perp,wbtc,pyusd'

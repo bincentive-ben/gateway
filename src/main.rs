@@ -304,6 +304,7 @@ async fn main() -> std::io::Result<()> {
 
     let state = AppState::new(
         &config.rpc_host,
+        config.rpc_wss.as_deref(),
         config.dev,
         wallet,
         Some((state_commitment, tx_commitment)),
@@ -500,9 +501,12 @@ fn default_swift_node() -> String {
 #[derive(FromArgs)]
 /// Drift gateway server
 struct GatewayConfig {
-    /// the solana RPC URL
+    /// the solana RPC HTTP/S URL
     #[argh(positional)]
     rpc_host: String,
+    /// the solana RPC WebSocket URL (wss://). If not provided, it is derived from rpc_host
+    #[argh(positional)]
+    rpc_wss: Option<String>,
     /// list of markets to trade
     /// e.g '--markets sol-perp,wbtc,pyusd'
     /// gateway creates market subscriptions for responsive trading
@@ -599,6 +603,7 @@ mod tests {
             .unwrap_or_else(|_| "https://api.devnet.solana.com".to_string());
         AppState::new(
             &rpc_endpoint,
+            None,
             true,
             wallet,
             None,
@@ -630,6 +635,7 @@ mod tests {
             .unwrap_or_else(|_| "https://api.devnet.solana.com".to_string());
         let state = AppState::new(
             &rpc_endpoint,
+            None,
             true,
             wallet,
             None,
@@ -678,6 +684,7 @@ mod tests {
             .unwrap_or_else(|_| "https://api.mainnet-beta.solana.com".to_string());
         let state = AppState::new(
             &rpc_endpoint,
+            None,
             false,
             wallet,
             None,
@@ -721,6 +728,7 @@ mod tests {
             .unwrap_or_else(|_| "https://api.mainnet-beta.solana.com".to_string());
         let state = AppState::new(
             &rpc_endpoint,
+            None,
             false,
             wallet,
             None,
