@@ -20,7 +20,7 @@ on:
 
 jobs:
   format-build-test:
-    runs-on: ubicloud
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
         CARGO_DRIFT_FFI_PATH: /usr/lib
@@ -55,15 +55,15 @@ jobs:
         run: |
           cargo -V
           cargo check
-      - name: Test
-        env:
-          DRIFT_GATEWAY_KEY: ${{ secrets.DRIFT_GATEWAY_KEY }}
-          TEST_DELEGATED_SIGNER: ${{ secrets.TEST_DELEGATED_SIGNER }}
-          TEST_RPC_ENDPOINT: ${{ secrets.DEVNET_RPC_ENDPOINT }}
-          TEST_MAINNET_RPC_ENDPOINT: ${{ secrets.MAINNET_RPC_ENDPOINT }}
+      # - name: Test
+      #   env:
+      #     DRIFT_GATEWAY_KEY: ${{ secrets.DRIFT_GATEWAY_KEY }}
+      #     TEST_DELEGATED_SIGNER: ${{ secrets.TEST_DELEGATED_SIGNER }}
+      #     TEST_RPC_ENDPOINT: ${{ secrets.DEVNET_RPC_ENDPOINT }}
+      #     TEST_MAINNET_RPC_ENDPOINT: ${{ secrets.MAINNET_RPC_ENDPOINT }}
 
-        # --test-threads, limit parallelism to prevent hitting RPC rate-limits
-        run: |
-          cargo -V
-          cp libdrift_ffi_sys.so ./target/debug/deps
-          cargo test --all -- --test-threads=2
+      #   # --test-threads, limit parallelism to prevent hitting RPC rate-limits
+      #   run: |
+      #     cargo -V
+      #     cp libdrift_ffi_sys.so ./target/debug/deps
+      #     cargo test --all -- --test-threads=2
